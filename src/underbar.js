@@ -64,7 +64,6 @@
     // implemented for you. Instead of using a standard `for` loop, though,
     // it uses the iteration helper `each`, which you will need to write.
     var result = -1;
-
     _.each(array, function(item, index) {
       if (item === target && result === -1) {
         result = index;
@@ -76,7 +75,6 @@
   // Return all elements of an array that pass a truth test.
   _.filter = function(collection, test) {
     var filteredArr = new Array;
-
     for(var i = 0; i < collection.length; i++){
       if(test(collection[i])){
         filteredArr.push(collection[i]);
@@ -89,13 +87,13 @@
   _.reject = function(collection, test) {
     // TIP: see if you can re-use _.filter() here, without simply
     // copying code in and modifying it
-     return _.filter(collection, function(x){
+    return _.filter(collection, function(x){
       return !test(x)
     });
   };
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
-     return [...new Set(array)];
+    return [...new Set(array)];
   };
   // Return the results of applying an iterator to each element.
   _.map = function(collection, iterator) {
@@ -151,13 +149,14 @@
   //
   //   var identity = _.reduce([5], function(total, number){
   //     return total + number * number;
-  //   }); // should be 5, regardless of the iterator function passed in
-  //          No accumulator is given so the first element is used.
+  //   });
+  // should be 5, regardless of the iterator function passed in
+  // No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
-   _.each(collection, function(item){
+    _.each(collection, function(item){
       var acc = iterator(accumulator, item);
-       accumulator === undefined ? accumulator = item : acc === undefined ?  accumulator += 0 : accumulator = acc;
-    })
+        accumulator === undefined ? accumulator = item : acc === undefined ?  accumulator += 0 : accumulator = acc;
+    });
     return accumulator;
   };
 
@@ -175,35 +174,21 @@
 
 
   // Determine whether all of the elements match a truth test.
-  // _.every = function(collection, iterator) {
-  //   // TIP: Try re-using reduce() here.
+    // TIP: Try re-using reduce() here.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
-      return collection === [] || undefined ? false :  _.reduce(collection, function(isTruthy, ele){
-        if(iterator === undefined){
-          return ele;
-        }else if(Boolean(iterator(ele)) === false){
-            return false;
-          }
+    return collection === [] || undefined ? false :  _.reduce(collection, function(isTruthy, ele){
+      if(iterator === undefined){
+        return ele;
+      }else if(Boolean(iterator(ele)) === false){
+        return false;
+      }
         return isTruthy;
-      }, true);
+    }, true);
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
-  // _.some = function(collection, iterator) {
-  //   // TIP: There's a very clever way to re-use every() here.
-  //     for(var i = 0; i < collection.length; i++){
-  //       var curItem = collection[i];
-  //       if(iterator === undefined){
-  //         return curItem;
-  //       }
-  //       if(Boolean(iterator(curItem)) === true){
-  //         return true;
-  //       }
-  //     }
-  //     return false;
-  // };
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
     var isTrue = _.every(collection,function(item){
@@ -232,12 +217,11 @@
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
-
     return _.reduce(arguments,function(final, arg){
-        for(var key in arg){
+      for(var key in arg){
         final[key] = arg[key];
-       }
-       return final;
+      }
+      return final;
     }, obj);
   };
 
@@ -246,11 +230,11 @@
   _.defaults = function(obj) {
     return _.reduce(arguments,function(final, arg){
       for(var key in arg){
-       if(final[key] === undefined){
-        final[key] = arg[key];
-       }
+        if(final[key] === undefined){
+          final[key] = arg[key];
+        }
       }
-    return final;
+      return final;
     }, obj);
   };
 
@@ -293,27 +277,26 @@
   // _.memoize should return a function that, when called, will check if it has
   // already computed the result for the given argument and return that value
   // instead if possible.
+
   _.memoize = function(func) {
     var memo = {};
     var slice = Array.prototype.slice;
-
     return function() {
       var args = slice.call(arguments);
-      if (Array.isArray(args)){
-        args = JSON.stringify(args);
-        if (args in memo){
-          return memo[args];
-        }else{
-          return (memo[args] = func.apply(this, JSON.parse(args)));
-        }
-      }
+      args = JSON.stringify(args);
       if (args in memo){
         return memo[args];
       }else{
-        return (memo[args] = func.apply(this, args));
+        return (memo[args] = func.apply(this, JSON.parse(args)));
       }
-    };
+    }
   };
+//   var spy = sinon.spy(function() { return 'Dummy output'; });
+// var memoSpy = _.memoize(spy);
+// memoSpy([1,2,3]);
+// expect(spy).to.have.been.calledOnce;
+// memoSpy(1,2,3);
+// expect(spy).to.have.been.calledTwice;
 
   // Delays a function for the given number of milliseconds, and then calls
   // it with the arguments supplied.
@@ -328,9 +311,10 @@
           funcArg.push(arguments[i]);
         }
       }
-      var runner = function() {return func.apply(this,funcArg)};
-      setInterval(runner, wait);
+    var runner = function() {return func.apply(this,funcArg)};
+    setInterval(runner, wait);
   };
+//var copy = [].slice.call(funcArg); <remove what you want> myFunc.apply(this, copy);
 
   /**
    * ADVANCED COLLECTION OPERATIONS
@@ -344,17 +328,18 @@
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
     var newarr=  array.slice(0);
-      function shuffleArray(array) {
-          for (var i = array.length - 1; i > 0; i--) {
-            var j = Math.floor(Math.random() * (i + 1));
-            var temp = array[i];
-              array[i] = array[j];
-              array[j] = temp;
-          }
-      return array;
+    function shuffleArray(array) {
+      for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+          array[i] = array[j];
+          array[j] = temp;
       }
+      return array;
+    }
     return shuffleArray(newarr);
   };
+
 // _.shuffle = function(array) {
 //     var shuffledArr = [];
 //     var randInt = [];
